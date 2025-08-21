@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <!-- Ação -->
+  <record id="action_ww_service_definition" model="ir.actions.act_window">
+    <field name="name">Serviços WAHA</field>
+    <field name="res_model">ww.service.definition</field>
+    <field name="view_mode">tree,form</field>
+    <field name="help" type="html">
+      <p>Cadastre um ou mais serviços WAHA e marque um como <b>Padrão</b>.</p>
+    </field>
+  </record>
+
+  <!-- Menu em Configurações -->
+  <menuitem id="menu_ww_root_settings" name="Workwise" parent="base.menu_config" sequence="70"/>
+  <menuitem id="menu_ww_services" name="Serviços WAHA"
+            parent="menu_ww_root_settings"
+            action="action_ww_service_definition"
+            sequence="10"/>
+
+  <!-- Tree -->
+  <record id="view_ww_service_definition_tree" model="ir.ui.view">
+    <field name="name">ww.service.definition.tree</field>
+    <field name="model">ww.service.definition</field>
+    <field name="arch" type="xml">
+      <tree editable="bottom">
+        <field name="active"/>
+        <field name="is_default"/>
+        <field name="name"/>
+        <field name="base_url"/>
+        <field name="session"/>
+        <field name="timeout"/>
+        <field name="file_transport"/>
+      </tree>
+    </field>
+  </record>
+
+  <!-- Form -->
+  <record id="view_ww_service_definition_form" model="ir.ui.view">
+    <field name="name">ww.service.definition.form</field>
+    <field name="model">ww.service.definition</field>
+    <field name="arch" type="xml">
+      <form string="Serviço WAHA">
+        <sheet>
+          <group col="6">
+            <field name="active"/>
+            <field name="is_default"/>
+            <field name="name" colspan="3"/>
+            <field name="session"/>
+            <field name="base_url" colspan="3"/>
+            <field name="api_key" password="True" colspan="3"/>
+            <field name="timeout"/>
+            <field name="file_transport"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+</odoo>
