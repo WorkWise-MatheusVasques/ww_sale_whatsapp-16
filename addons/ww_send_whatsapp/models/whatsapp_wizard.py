@@ -154,7 +154,9 @@ class WhatsappCompose(models.TransientModel):
                 raise UserError(_("Relatório de Pedido de Venda ('%s') não encontrado. Verifique se o app 'Vendas' está instalado corretamente.") % report_name)
 
         # AQUI ESTÁ A CORREÇÃO PRINCIPAL
-        pdf_bytes = report._render_qweb_pdf(res_id)[0]
+        # Linha corrigida
+        # Linha final e correta
+        pdf_bytes = self.env['ir.actions.report']._render_qweb_pdf(report_name, [res_id])[0]    
 
         sale = self.env["sale.order"].browse(res_id)
         filename = f"Pedido_{(sale.name or 'pedido').replace('/', '_')}.pdf"
