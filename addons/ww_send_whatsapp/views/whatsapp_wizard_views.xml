@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <record id="ww_whatsapp_compose_form_waha" model="ir.ui.view">
+    <field name="name">ww.whatsapp.compose.form.waha</field>
+    <field name="model">ww.whatsapp.compose</field>
+    <field name="arch" type="xml">
+      <form string="Enviar por WhatsApp">
+        <sheet>
+          <group col="12">
+            <!-- Linha 1: contato (6 col) + espaçador (3 col) + sessão (3 col) -->
+            <field name="partner_id" options="{'no_create': True}" colspan="6"/>
+
+            <!-- Espaçador VÁLIDO (não é <label/>) -->
+            <div class="o_form_label" colspan="3"/>
+
+            <!-- Rótulo + campo da sessão (2 + 1 col) -->
+            <label for="session" string="Sessão WAHA" class="o_text_nowrap" colspan="2"/>
+            <field name="session" readonly="1" nolabel="1" class="o_text_nowrap" colspan="1"/>
+
+            <!-- Linha 2: telefone em toda a largura -->
+            <field name="phone"
+                   string="Telefone (E.164 / chatId)"
+                   placeholder="+5511999999999 ou 5511999999999@c.us"
+                   required="1"
+                   colspan="12"/>
+
+            <!-- Linha 3: mensagem larga -->
+            <field name="message"
+                   widget="text"
+                   nolabel="1"
+                   options="{'rows': 10}"
+                   placeholder="Escreva sua mensagem..."
+                   colspan="12"/>
+          </group>
+
+          <group string="Anexos" col="12">
+            <field name="attachment_ids" widget="many2many_binary" colspan="12"/>
+          </group>
+        </sheet>
+        <footer>
+          <button string="Enviar" type="object" name="action_send" class="btn-primary"/>
+          <button string="Cancelar" class="btn-secondary" special="cancel"/>
+        </footer>
+      </form>
+    </field>
+  </record>
+</odoo>

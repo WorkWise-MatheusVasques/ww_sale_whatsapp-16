@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <record id="view_order_form_whatsapp_waha" model="ir.ui.view">
+    <field name="name">sale.order.form.whatsapp.waha</field>
+    <field name="model">sale.order</field>
+    <field name="inherit_id" ref="sale.view_order_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//header/button[@name='action_quotation_send']" position="after">
+        <button name="action_open_whatsapp_wizard"
+                type="object"
+                string="Enviar por WhatsApp"
+                class="oe_highlight"
+                attrs="{'invisible': [('state', 'not in', ['sale', 'sent', 'done'])]}"/>
+      </xpath>
+    </field>
+  </record>
+</odoo>
