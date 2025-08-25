@@ -141,25 +141,27 @@ class WhatsappCompose(models.TransientModel):
     @api.model
     def _render_main_pdf_for(self, res_model, res_id):
         """Gera o PDF do registro de origem (Odoo 16)."""
-        if res_model != "sale.order":
-            raise UserError(_("Modelo não suportado: %s") % res_model)
+        if res_model == "sale.order":
+            report_name = "sale.report_saleorder"
+            report = self.env.ref("sale.action_report_saleorder", raise_if_not_found=False)
+            record = self.env[res_model].browse(res_id)
+            filename = f"Pedido_{(record.name or 'pedido').replace('/', '_')}.pdf"
 
-        report_name = "sale.report_saleorder"
-        report = self.env.ref("sale.action_report_saleorder", raise_if_not_found=False)
+        elif res_model == "purchase.order":
+            report_name = "purchase.report_purchaseorder"
+            report = self.env.ref("purchase.action_report_purchase_order", raise_if_not_found=False)
+            record = self.env[res_model].browse(res_id)
+            filename = f"PedidoCompra_{(record.name or 'pedido').replace('/', '_')}.pdf"
+        else:
+            raise UserError(_("Modelo não suportado: %s") % res_model)
 
         if not report or not report.exists():
             # Fallback para a busca pelo nome técnico se o ref falhar
             report = self.env["ir.actions.report"].search([("report_name", "=", report_name)], limit=1)
             if not report:
-                raise UserError(_("Relatório de Pedido de Venda ('%s') não encontrado. Verifique se o app 'Vendas' está instalado corretamente.") % report_name)
+                raise UserError(_("Relatório ('%s') não encontrado.") % report_name)
 
-        # AQUI ESTÁ A CORREÇÃO PRINCIPAL
-        # Linha corrigida
-        # Linha final e correta
-        pdf_bytes = self.env['ir.actions.report']._render_qweb_pdf(report_name, [res_id])[0]    
-
-        sale = self.env["sale.order"].browse(res_id)
-        filename = f"Pedido_{(sale.name or 'pedido').replace('/', '_')}.pdf"
+        pdf_bytes = self.env['ir.actions.report']._render_qweb_pdf(report.report_name, [res_id])[0]
         return filename, pdf_bytes
 
     # ---------------- defaults ----------------
@@ -184,8 +186,8 @@ class WhatsappCompose(models.TransientModel):
         # ---- Fallbacks visíveis no wizard ----
         if not vals.get("partner_id"):
             pid = self.env.context.get("default_partner_id")
-            if not pid and res_model == "sale.order" and res_id:
-                pid = self.env["sale.order"].browse(res_id).partner_id.id
+            if not pid and res_model in ["sale.order", "purchase.order"] and res_id:
+                pid = self.env[res_model].browse(res_id).partner_id.id
             if pid:
                 vals["partner_id"] = pid
 
@@ -199,7 +201,7 @@ class WhatsappCompose(models.TransientModel):
                 vals["message"] = msg
 
         # ---- Anexo automático do PDF (como no e-mail) ----
-        if res_model == "sale.order" and res_id:
+        if res_model in ["sale.order", "purchase.order"] and res_id:
             filename, pdf_bytes = self._render_main_pdf_for(res_model, res_id)
             Attachment = self.env["ir.attachment"].sudo()
             attach = Attachment.search([
