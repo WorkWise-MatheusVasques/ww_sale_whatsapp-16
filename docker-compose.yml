@@ -1,43 +1,40 @@
+version: '2'
 services:
-  odoo:
-    build: .
-    container_name: odoo16
+  db:
+    image: postgres:15
+    user: root
+    environment:
+      - POSTGRES_USER=odoo
+      - POSTGRES_PASSWORD=odoo16@2022      
+      - POSTGRES_DB=postgres
+    restart: always             # run as a service
+    volumes:
+        - odoo-db-data:/var/lib/postgresql/data
+
+  odoo16:
+    image: odoo:16
+    user: root
     depends_on:
       - db
     ports:
-      - "8069:8069"
-    volumes:
-      - ./:/mnt/extra-addons/ww_sale_whatsapp-16
-      - odoo-web-data:/var/lib/odoo
-    # REMOVEMOS a linha "command" para permitir a configuração manual
+      - "10016:8069"
+      - "20016:8072" # live chat
+    tty: true
+    command: --
     environment:
-      - POSTGRES_PASSWORD=odoo_password
-      - POSTGRES_USER=odoo
-      - POSTGRES_DB=postgres
-      - POSTGRES_HOST=db
-    restart: always
-
-  db:
-    image: postgres:14
-    container_name: postgres14
-    environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=odoo
-      - POSTGRES_PASSWORD=odoo_password
+      - HOST=db
+      - USER=odoo
+      - PASSWORD=odoo16@2022
     volumes:
-      - odoo-db-data:/var/lib/postgresql/data
-    restart: always
-
-  waha:
-    image: devlikeapro/waha
-    container_name: waha
-    ports:
-      - "4000:3000"
-    volumes:
-      - waha-sessions:/app/.sessions
-    restart: always
-
+      #- /etc/timezone:/etc/timezone:ro
+      #- /etc/localtime:/etc/localtime:ro
+      - ./entrypoint.sh:/entrypoint.sh
+      - ./addons:/mnt/extra-addons
+      - ./etc:/etc/odoo
 volumes:
   odoo-web-data:
   odoo-db-data:
   waha-sessions:
+  
+restart: always             # run as a service
+    

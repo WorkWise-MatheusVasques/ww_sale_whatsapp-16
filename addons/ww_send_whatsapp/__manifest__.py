@@ -10,14 +10,14 @@
         "base_setup",
         "sale_management",
         "mail",
+        "sale",
     ],
     "data": [
         "security/ir.model.access.csv",
         "views/sale_order_views.xml",
         "views/whatsapp_wizard_views.xml",
         "views/res_config_settings_view.xml",
-        # O arquivo de dados pode ser mantido ou removido dependendo da sua estratégia
-        # "data/params.xml", # Se você gerencia a config via UI, pode comentar/remover
+        "views/service_definition_views.xml",
     ],
     "installable": True,
     "application": False,

@@ -144,18 +144,17 @@ class WhatsappCompose(models.TransientModel):
         if res_model != "sale.order":
             raise UserError(_("Modelo não suportado: %s") % res_model)
 
-        # MUDANÇA: Busca robusta pelo relatório usando o nome técnico
         report_name = "sale.report_saleorder"
-        report = self.env["ir.actions.report"].search([("report_name", "=", report_name)], limit=1)
-
-        if not report:
-            # Se a busca falhar, tentamos o método antigo como último recurso
-            report = self.env.ref("sale.action_report_saleorder", raise_if_not_found=False)
+        report = self.env.ref("sale.action_report_saleorder", raise_if_not_found=False)
 
         if not report or not report.exists():
-            raise UserError(_("Relatório de Pedido de Venda (%s) não encontrado. Verifique se o app 'Vendas' está instalado corretamente.") % report_name)
+            # Fallback para a busca pelo nome técnico se o ref falhar
+            report = self.env["ir.actions.report"].search([("report_name", "=", report_name)], limit=1)
+            if not report:
+                raise UserError(_("Relatório de Pedido de Venda ('%s') não encontrado. Verifique se o app 'Vendas' está instalado corretamente.") % report_name)
 
-        pdf_bytes, _fmt = report._render_qweb_pdf(res_id)
+        # AQUI ESTÁ A CORREÇÃO PRINCIPAL
+        pdf_bytes = report._render_qweb_pdf(res_id)[0]
 
         sale = self.env["sale.order"].browse(res_id)
         filename = f"Pedido_{(sale.name or 'pedido').replace('/', '_')}.pdf"
