@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <record id="view_order_form_whatsapp_waha_purchase" model="ir.ui.view">
+    <field name="name">purchase.order.form.whatsapp.waha</field>
+    <field name="model">purchase.order</field>
+    <field name="inherit_id" ref="purchase.purchase_order_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//header/button[@name='action_rfq_send']" position="after">
+        <button name="action_open_whatsapp_wizard"
+                type="object"
+                string="Enviar por WhatsApp"
+                class="oe_highlight"
+                attrs="{'invisible': [('state', 'in', ['draft', 'sent', 'to approve'])]}"/>
+      </xpath>
+    </field>
+  </record>
+</odoo>

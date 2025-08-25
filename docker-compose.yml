@@ -1,6 +1,3 @@
-# docker-compose.yml (Versão Final Corrigida)
-version: '3.8'
-
 services:
   db:
     image: postgres:15
@@ -40,9 +37,10 @@ services:
       - "4000:3000"
     volumes:
       - waha-sessions:/app/.sessions
-  restart: always
-  environment:
-    - WAHA_API_KEY=dDefikcm30OBvbDTxBgZ8bo7MhL1IUPA
+    # CORREÇÃO AQUI: Indente as duas linhas abaixo
+    restart: always
+    environment:
+      - WAHA_API_KEY=dDefikcm30OBvbDTxBgZ8bo7MhL1IUPA
 
 volumes:
   odoo-db-data:
