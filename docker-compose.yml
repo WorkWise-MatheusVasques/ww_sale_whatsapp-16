@@ -16,9 +16,13 @@ services:
   odoo:
     build: .
     container_name: odoo_app
+  odoo:
+    build: .
+    container_name: odoo_app
     depends_on:
       - db
     ports:
+      - "8069:8069"
       - "8069:8069"
       - "20016:8072" # live chat
     tty: true
@@ -28,9 +32,25 @@ services:
       - PASSWORD=odoo
       - ODOO_RC=/etc/odoo/odoo.conf
       - ADMIN_PASSWORD=admin
+      - PASSWORD=odoo
+      - ODOO_RC=/etc/odoo/odoo.conf
+      - ADMIN_PASSWORD=admin
     volumes:
       - ./addons:/mnt/extra-addons
       - ./etc:/etc/odoo
+    restart: always
+
+  waha:
+    image: devlikeapro/waha
+    container_name: waha_plus
+    ports:
+      - "4000:3000"
+    volumes:
+      - waha-sessions:/app/.sessions
+    restart: always
+    environment:
+      - WAHA_API_KEY=dDefikcm30OBvbDTxBgZ8bo7MhL1IUPA
+
     restart: always
 
   waha:
