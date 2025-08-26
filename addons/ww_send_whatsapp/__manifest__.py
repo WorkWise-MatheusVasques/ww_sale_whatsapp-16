@@ -1,8 +1,8 @@
 {
-    "name": "Sale & Purchase: Enviar por WhatsApp (WAHA Plus)",
+    "name": "Enviar por WhatsApp",
     "version": "16.0.2.0.0",
-    "summary": "Botão no Pedido de Venda e Compra para enviar PDF via WAHA Plus",
-    "author": "Você",
+    "summary": "Botão no Pedido de Venda e Compra para enviar PDF",
+    "author": "Work Wise Consulting",
     "license": "LGPL-3",
     "depends": [
         "base",
