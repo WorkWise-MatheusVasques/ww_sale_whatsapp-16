@@ -4,9 +4,8 @@
     <field name="name">sale.order.form.whatsapp.waha</field>
     <field name="model">sale.order</field>
     <field name="inherit_id" ref="sale.view_order_form"/>
-    <field name="priority" eval="99"/>
     <field name="arch" type="xml">
-      <xpath expr="//header/button[@name='action_quotation_send']" position="after">
+      <xpath expr="//button[@name='action_quotation_send' and contains(@states, 'sent')]" position="after">
         <button name="action_open_whatsapp_wizard"
                 type="object"
                 string="Enviar por WhatsApp"

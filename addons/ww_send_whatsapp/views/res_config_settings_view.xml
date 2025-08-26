@@ -7,7 +7,7 @@
     <field name="arch" type="xml">
       <xpath expr="//div[hasclass('settings')]" position="inside">
         <div class="app_settings_block" data-string="WhatsApp" string="WhatsApp" data-key="ww_send_whatsapp">
-          <h2><i class="fa fa-whatsapp"/> WhatsApp</h2>
+          <h2>WhatsApp</h2>
           <div class="row mt16 o_settings_container">
             <div class="col-12 col-lg-6 o_setting_box">
               <div class="o_setting_left_pane">
